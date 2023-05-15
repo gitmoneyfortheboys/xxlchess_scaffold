@@ -17,12 +17,8 @@ public class Pawn extends Piece {
         int currentX = this.getCurrentSquare().getX();
         int currentY = this.getCurrentSquare().getY();
 
-        // Pawns can move forward one space if unoccupied, or diagonally forward to capture an opponent's piece.
-        // Pawns can move two spaces forward on their first move only if both squares are unoccupied.
-        // Note: This code assumes that the board is oriented such that the white pieces are at the bottom.
-
         int direction = (this.getColor() == Color.WHITE) ? -1 : 1;
-        int startingRank = (this.getColor() == Color.WHITE) ? 6 : 1;
+        int startingRank = (this.getColor() == Color.WHITE) ? 12 : 1; // Modifying starting ranks for 14x14 board
 
         // Move forward one space
         if (currentY + direction >= 0 && currentY + direction < 14) {

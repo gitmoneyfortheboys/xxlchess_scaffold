@@ -67,11 +67,24 @@ public class App extends PApplet {
         this.game = new Game();
             
         // Create a new King piece and add it to the game
-        Square kingSquare = game.getBoard().getSquare(7, 7);
+        Square kingSquare = game.getBoard().getSquare(7, 13);
         King king = new King(Color.WHITE, kingSquare, "src/main/resources/XXLChess/w-king.png");
         game.addPiece(king);
 
-        
+        // Create new Pawn pieces and add them to the game
+        for (int x = 0; x < 14; x++) {
+            Square pawnSquare = game.getBoard().getSquare(x, 12);
+            Pawn pawn = new Pawn(Color.WHITE, pawnSquare, "src/main/resources/XXLChess/w-pawn.png");
+            game.addPiece(pawn);
+        }
+
+        // Create two Bishop pieces and add them to the game
+        Square bishopSquare1 = game.getBoard().getSquare(11, 13);
+        Square bishopSquare2 = game.getBoard().getSquare(2,13);
+        Bishop bishop1 = new Bishop(Color.WHITE, bishopSquare1, "src/main/resources/XXLChess/w-bishop.png");
+        game.addPiece(bishop1);
+        Bishop bishop2 = new Bishop(Color.WHITE, bishopSquare2, "src/main/resources/XXLChess/w-bishop.png");
+        game.addPiece(bishop2);
     
        // board = new Board();
     }
