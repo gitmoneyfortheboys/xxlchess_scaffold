@@ -85,6 +85,14 @@ public class App extends PApplet {
         game.addPiece(bishop1);
         Bishop bishop2 = new Bishop(Color.WHITE, bishopSquare2, "src/main/resources/XXLChess/w-bishop.png");
         game.addPiece(bishop2);
+
+        //Create two rook pieces and add them to the game
+        Square rookSquare1 = game.getBoard().getSquare(0,13);
+        Square rookSquare2 = game.getBoard().getSquare(13,13);
+        Rook rook1 = new Rook(Color.WHITE, rookSquare1, "src/main/resources/XXLChess/w-rook.png");
+        game.addPiece(rook1);
+        Rook rook2 = new Rook(Color.WHITE, rookSquare2, "src/main/resources/XXLChess/w-rook.png");
+        game.addPiece(rook2);
     
        // board = new Board();
     }
