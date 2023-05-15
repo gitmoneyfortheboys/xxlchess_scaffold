@@ -1,0 +1,4 @@
+find . -type f -exec cat {} + | pbcopy
+
+
+cd src/main/java/XXLChess

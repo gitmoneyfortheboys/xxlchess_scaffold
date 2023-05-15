@@ -1,0 +1,5 @@
+package XXLChess;
+
+public enum PieceType {
+    KING, QUEEN, ROOK, BISHOP, KNIGHT, PAWN, AMAZON, ARCHBISHOP, CAMEL, CHANCELLOR, KNIGHTKING
+}
