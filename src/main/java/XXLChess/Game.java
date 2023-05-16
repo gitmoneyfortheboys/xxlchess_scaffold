@@ -53,24 +53,79 @@ public class Game {
         }
     
         // Initialize variables for the selected piece and its legal moves
-        Piece selectedPiece;
-        List<Square> legalMoves;
+        Piece selectedPiece = null;
+        List<Square> legalMoves = new ArrayList<>();
     
-        // Select a random piece until one with legal moves is found
-        do {
-            // Select a random piece
-            selectedPiece = blackPieces.get(new Random().nextInt(blackPieces.size()));
+        // Check if the black king is in check
+        boolean kingInCheck = isKingInCheck(Color.BLACK);
     
-            // Get the legal moves for the selected piece
-            legalMoves = selectedPiece.calculateLegalMoves(board);
-        } while (legalMoves.isEmpty());
+        if (kingInCheck) {
+            // If the king is in check, find a piece with a legal move that resolves the check
+            for (Piece piece : blackPieces) {
+                List<Square> pieceLegalMoves = piece.calculateLegalMoves(board);
+    
+                final Piece finalPiece = piece;
+                pieceLegalMoves.removeIf(move -> {
+                    // Make a hypothetical move
+                    Square originalSquare = finalPiece.getCurrentSquare();
+                    Piece capturedPiece = move.getPiece();
+                    originalSquare.setPiece(null);
+                    move.setPiece(finalPiece);
+                    finalPiece.setCurrentSquare(move);
+    
+                    // Check if the king would still be in check
+                    boolean stillInCheck = isKingInCheck(Color.BLACK);
+    
+                    // Undo the hypothetical move
+                    finalPiece.setCurrentSquare(originalSquare);
+                    move.setPiece(capturedPiece);
+                    originalSquare.setPiece(finalPiece);
+    
+                    // If the king would still be in check, the move is not legal
+                    return stillInCheck;
+                });
+    
+                // If there are legal moves that can resolve the check, select this piece and its moves
+                if (!pieceLegalMoves.isEmpty()) {
+                    selectedPiece = piece;
+                    legalMoves = pieceLegalMoves;
+                    break;
+                }
+            }
+    
+            // If there are no legal moves and the king is in check, it's checkmate
+            if (legalMoves.isEmpty()) {
+                System.out.println("You won by checkmate");
+                // Terminate the game, assuming a method game.terminate() exists.
+                //this.terminate();
+                return;
+            }
+        } else {
+            // If the king is not in check, compile a list of all pieces that have legal moves
+            List<Piece> piecesWithLegalMoves = new ArrayList<>();
+            for (Piece piece : blackPieces) {
+                List<Square> pieceLegalMoves = piece.calculateLegalMoves(board);
+                if (!pieceLegalMoves.isEmpty()) {
+                    piecesWithLegalMoves.add(piece);
+                }
+            }
+    
+            // Select a random piece from the list and get its legal moves
+            if (!piecesWithLegalMoves.isEmpty()) {
+                selectedPiece = piecesWithLegalMoves.get(new Random().nextInt(piecesWithLegalMoves.size()));
+                legalMoves = selectedPiece.calculateLegalMoves(board);
+            }
+        }
     
         // If the selected piece has legal moves, make a random legal move
-        if (!legalMoves.isEmpty()) {
+        if (selectedPiece != null && !legalMoves.isEmpty()) {
             Square destination = legalMoves.get(new Random().nextInt(legalMoves.size()));
             makeMove(selectedPiece, destination);
         }
     }
+    
+    
+    
     
 
     private void makeMove(Piece piece, Square destination) {
@@ -98,16 +153,54 @@ public class Game {
         currentSquare.setPiece(null);
         destination.setPiece(piece);
         piece.setCurrentSquare(destination);
+
+        // Check if the opponent's King (black) is in Check
+        if (isKingInCheck(Color.BLACK)) {
+            System.out.println("The black king is in check!");
+        }
     
         // Switch the current player
         currentPlayer = (currentPlayer == Color.WHITE) ? Color.BLACK : Color.WHITE;
     
-        // Computer move
-    
-            // Make the computer's move, if it's the computer's turn
+        // Make the computer's move, if it's the computer's turn
         if (currentPlayer == Color.BLACK) {
             computerMove();
         }
+    }
+
+    public List<Square> getAllLegalMoves(Color color) {
+        List<Square> legalMoves = new ArrayList<>();
+        for (Piece piece : pieces) {
+            if (piece.getColor() == color) {
+                legalMoves.addAll(piece.calculateLegalMoves(board));
+            }
+        }
+        return legalMoves;
+    }
+
+    public boolean isKingInCheck(Color kingColor) {
+        // Get the position of the king
+        Square kingSquare = null;
+        for (Piece piece : pieces) {
+            if (piece.getType() == PieceType.KING && piece.getColor() == kingColor) {
+                kingSquare = piece.getCurrentSquare();
+                break;
+            }
+        }
+    
+        // If we didn't find the king (which shouldn't happen), return false
+        if (kingSquare == null) {
+            return false;
+        }
+    
+        // Get the color of the opponent
+        Color opponentColor = (kingColor == Color.WHITE) ? Color.BLACK : Color.WHITE;
+    
+        // Get all legal moves of the opponent
+        List<Square> opponentMoves = getAllLegalMoves(opponentColor);
+    
+        // If any of the opponent's legal moves can reach the king's square, the king is in check
+        return opponentMoves.contains(kingSquare);
     }
     
 
