@@ -13,7 +13,6 @@ public class Game {
     private Board board;
     private Color currentPlayer;
     private List<Piece> pieces;
-    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     public Game() {
         board = new Board();
@@ -43,7 +42,6 @@ public class Game {
         makeMove(piece, destination);
         //computerMove(); // ISSUE HERE
     }
-
 
     public void computerMove() {
         // Get a list of all black pieces

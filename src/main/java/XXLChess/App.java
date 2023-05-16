@@ -20,7 +20,6 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.io.IOException;
-import org.json.JSONObject;
 
 
 
@@ -39,8 +38,10 @@ public class App extends PApplet {
 
     public static final int WHITESQUARESCOLOUR = 0xFFF0D9B5;
     public static final int BLACKSQUARESCOLOUR = 0xFFB58863; 
+
+    private String configPath;
 	
-    public String configPath = "src/main/resources/config.json";
+
 
    // private Board board;
     private Game game;
@@ -48,15 +49,9 @@ public class App extends PApplet {
     private boolean pieceSelected = false;
 
 
-    private int playerTime;
-    private int cpuTime;
-
     public App() {
-
-        loadConfig();
+        this.configPath = "config.json";
     }
-
-
 
     /**
      * Initialise the setting of the window size.
@@ -69,7 +64,6 @@ public class App extends PApplet {
      * Load all resources such as images. Initialise the elements such as the player, enemies and map elements.
     */
     public void setup() {
-        loadConfig();
         frameRate(FPS);
             
         // Initialize the game instance variable
@@ -322,41 +316,8 @@ public class App extends PApplet {
                 }
             }
         }
-
-        textSize(20);
-        fill(0, 0, 0);
-        textAlign(LEFT, TOP);
-        text(formatTime(cpuTime), WIDTH - SIDEBAR + 10, 10); // CPU time at the top of the sidebar
-        textAlign(LEFT, BOTTOM);
-        text(formatTime(playerTime), WIDTH - SIDEBAR + 10, HEIGHT - 10); // Player time at the bottom of the sidebar
     }
 
-    private String formatTime(int timeInSeconds) {
-        int minutes = timeInSeconds / 60;
-        int seconds = timeInSeconds % 60;
-        return String.format("%d:%02d", minutes, seconds);
-    }
-    private void loadConfig() {
-        try {
-            String content = new String(Files.readAllBytes(Paths.get(configPath)));
-            JSONObject config = new JSONObject(content);
-    
-            String layout = config.getString("layout");
-            int playerSeconds = config.getJSONObject("time_controls").getJSONObject("player").getInt("seconds");
-            int playerIncrement = config.getJSONObject("time_controls").getJSONObject("player").getInt("increment");
-            int cpuSeconds = config.getJSONObject("time_controls").getJSONObject("cpu").getInt("seconds");
-            int cpuIncrement = config.getJSONObject("time_controls").getJSONObject("cpu").getInt("increment");
-            String playerColour = config.getString("player_colour");
-            double pieceMovementSpeed = config.getDouble("piece_movement_speed");
-            int maxMovementTime = config.getInt("max_movement_time");
-    
-            // Now you can use these variables wherever you need in your application.
-            // For example, you could set them as instance variables in your class or use them to initialize your game.
-    
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
     
 
 
