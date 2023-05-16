@@ -3,11 +3,17 @@ package XXLChess;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+
 
 public class Game {
     private Board board;
     private Color currentPlayer;
     private List<Piece> pieces;
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     public Game() {
         board = new Board();
@@ -37,6 +43,7 @@ public class Game {
         makeMove(piece, destination);
         //computerMove(); // ISSUE HERE
     }
+
 
     public void computerMove() {
         // Get a list of all black pieces
