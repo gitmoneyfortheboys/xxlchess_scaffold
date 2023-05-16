@@ -20,6 +20,7 @@ import processing.core.PImage;
 import processing.event.MouseEvent;
 import XXLChess.*;
 import java.util.*;
+import java.io.*;
 
 
 
@@ -138,7 +139,7 @@ public class App extends PApplet {
         // Create black pawns and add to the game
         for (int x = 0; x < 14; x++) {
             Square blackPawnSquare = game.getBoard().getSquare(x, 1);
-            Pawn blackPawn = new Pawn(Color.WHITE, blackPawnSquare, "src/main/resources/XXLChess/b-pawn.png");
+            Pawn blackPawn = new Pawn(Color.BLACK, blackPawnSquare, "src/main/resources/XXLChess/b-pawn.png");
             game.addPiece(blackPawn);
         }
 
