@@ -269,25 +269,32 @@ public class App extends PApplet {
         // Draw each square on the board
         for (int x = 0; x < BOARD_WIDTH; x++) {
             for (int y = 0; y < BOARD_WIDTH; y++) {
-                // Set the color based on the square's coordinates
-                if ((x + y) % 2 == 0) {
+                Square square = game.getBoard().getSquare(x, y);
+                
+                // If the square contains the selected piece, set the color to green
+                if (pieceSelected && square.equals(selectedPiece.getCurrentSquare())) {
+                    fill(0xFFCDD26A);
+                }
+                // Otherwise, set the color based on the square's coordinates
+                else if ((x + y) % 2 == 0) {
                     fill(WHITESQUARESCOLOUR);
                 } else {
                     fill(BLACKSQUARESCOLOUR);
                 }
-            // Draw the square
-            rect(x * CELLSIZE, y * CELLSIZE, CELLSIZE, CELLSIZE);
-
-            // Draw piece if it exists on this square
-            Square square = game.getBoard().getSquare(x, y);
-            if (!square.isEmpty()) {
-                Piece piece = square.getPiece();
-                PImage img = loadImage(piece.getImgPath());
-                image(img, x * CELLSIZE, y * CELLSIZE, CELLSIZE, CELLSIZE);
+    
+                // Draw the square
+                rect(x * CELLSIZE, y * CELLSIZE, CELLSIZE, CELLSIZE);
+    
+                // Draw piece if it exists on this square
+                if (!square.isEmpty()) {
+                    Piece piece = square.getPiece();
+                    PImage img = loadImage(piece.getImgPath());
+                    image(img, x * CELLSIZE, y * CELLSIZE, CELLSIZE, CELLSIZE);
                 }
             }
         }
     }
+
 	
 
     public static void main(String[] args) {
