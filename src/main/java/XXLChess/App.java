@@ -102,6 +102,24 @@ public class App extends PApplet {
         Knight knight2 = new Knight(Color.WHITE, knightSquare2, "src/main/resources/XXLChess/w-knight.png");
         game.addPiece(knight2);
 
+        // Create two Archbishop pieces and add them to the game
+
+        Square archbishopSquare1 = game.getBoard().getSquare(3, 13);
+        Square archbishopSquare2 = game.getBoard().getSquare(10,13);
+        Archbishop archbishop1 = new Archbishop(Color.WHITE, archbishopSquare1, "src/main/resources/XXLChess/w-archbishop.png");
+        game.addPiece(archbishop1);
+        Archbishop archbishop2 = new Archbishop(Color.WHITE, archbishopSquare2, "src/main/resources/XXLChess/w-archbishop.png");
+        game.addPiece(archbishop2);
+
+        // Create two Camel pieces and add them to the game
+        Square camelSquare1 = game.getBoard().getSquare(4, 13);
+        Square camelSquare2 = game.getBoard().getSquare(9,13);
+        Camel camel1 = new Camel(Color.WHITE, camelSquare1, "src/main/resources/XXLChess/w-camel.png");
+        game.addPiece(camel1);
+        Camel camel2 = new Camel(Color.WHITE, camelSquare2, "src/main/resources/XXLChess/w-camel.png");
+        game.addPiece(camel2);
+
+
     
        // board = new Board();
     }
