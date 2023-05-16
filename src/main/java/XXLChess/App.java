@@ -270,10 +270,20 @@ public class App extends PApplet {
         for (int x = 0; x < BOARD_WIDTH; x++) {
             for (int y = 0; y < BOARD_WIDTH; y++) {
                 Square square = game.getBoard().getSquare(x, y);
+    
+                List<Square> legalMoves = null;
+                // If a piece is selected, calculate its legal moves
+                if (pieceSelected) {
+                    legalMoves = selectedPiece.calculateLegalMoves(game.getBoard());
+                }
                 
                 // If the square contains the selected piece, set the color to green
                 if (pieceSelected && square.equals(selectedPiece.getCurrentSquare())) {
                     fill(0xFFCDD26A);
+                }
+                // If the square is a legal move for the selected piece, set the color to blue
+                else if (pieceSelected && legalMoves.contains(square)) {
+                    fill(0xFFC4E0E8);
                 }
                 // Otherwise, set the color based on the square's coordinates
                 else if ((x + y) % 2 == 0) {
@@ -294,6 +304,7 @@ public class App extends PApplet {
             }
         }
     }
+    
 
 	
 
