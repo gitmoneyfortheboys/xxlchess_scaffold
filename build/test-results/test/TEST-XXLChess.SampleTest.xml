@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="XXLChess.SampleTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-05-16T16:02:23" hostname="Hadis-Air" time="0.066">
+<testsuite name="XXLChess.SampleTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-05-16T17:36:13" hostname="Hadis-Air" time="0.052">
   <properties/>
-  <testcase name="simpleTest()" classname="XXLChess.SampleTest" time="0.066"/>
+  <testcase name="simpleTest()" classname="XXLChess.SampleTest" time="0.052"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

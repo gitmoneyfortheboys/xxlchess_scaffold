@@ -40,6 +40,9 @@ public class App extends PApplet {
     public static final int BLACKSQUARESCOLOUR = 0xFFB58863; 
 
     private String configPath;
+
+    private Timer playerTimer;
+    private Timer cpuTimer;
 	
 
 
@@ -50,7 +53,8 @@ public class App extends PApplet {
 
 
     public App() {
-        this.configPath = "config.json";
+        this.configPath = "/Users/quizapp/Desktop/xxlchess_scaffold/config.json";
+        
     }
 
     /**
@@ -65,6 +69,7 @@ public class App extends PApplet {
     */
     public void setup() {
         frameRate(FPS);
+        loadConfig();
             
         // Initialize the game instance variable
         this.game = new Game();
@@ -316,9 +321,24 @@ public class App extends PApplet {
                 }
             }
         }
+
+        fill(255);
+        textSize(24);
+        text(playerTimer.toString(), WIDTH - SIDEBAR / 2, HEIGHT - 50); // Display player timer at the bottom of the sidebar
+        text(cpuTimer.toString(), WIDTH - SIDEBAR / 2, 50); // Display CPU timer at the top of the sidebar
     }
 
-    
+    private void loadConfig() {
+        JSONObject config = loadJSONObject(configPath);
+        JSONObject timeControls = config.getJSONObject("time_controls");
+
+        JSONObject playerTimeControls = timeControls.getJSONObject("player");
+        this.playerTimer = new Timer(playerTimeControls.getInt("seconds"), playerTimeControls.getInt("increment"));
+
+        JSONObject cpuTimeControls = timeControls.getJSONObject("cpu");
+        this.cpuTimer = new Timer(cpuTimeControls.getInt("seconds"), cpuTimeControls.getInt("increment"));
+    }
+
 
 
 
