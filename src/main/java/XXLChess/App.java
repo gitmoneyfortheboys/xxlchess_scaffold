@@ -283,7 +283,12 @@ public class App extends PApplet {
                 }
                 // If the square is a legal move for the selected piece, set the color to blue
                 else if (pieceSelected && legalMoves.contains(square)) {
-                    fill(0xFFC4E0E8);
+                    // If the square is occupied by an enemy piece, set the color to light red
+                    if (!square.isEmpty() && square.getPiece().getColor() != selectedPiece.getColor()) {
+                        fill(0xFFFFA466);
+                    } else {
+                        fill(0xFFC4E0E8);
+                    }
                 }
                 // Otherwise, set the color based on the square's coordinates
                 else if ((x + y) % 2 == 0) {
@@ -304,6 +309,7 @@ public class App extends PApplet {
             }
         }
     }
+    
     
 
 	
