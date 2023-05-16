@@ -102,14 +102,11 @@ public class App extends PApplet {
         Knight knight2 = new Knight(Color.WHITE, knightSquare2, "src/main/resources/XXLChess/w-knight.png");
         game.addPiece(knight2);
 
-        // Create two Archbishop pieces and add them to the game
+        // Create Archbishop piece and add to the game
 
         Square archbishopSquare1 = game.getBoard().getSquare(3, 13);
-        Square archbishopSquare2 = game.getBoard().getSquare(10,13);
         Archbishop archbishop1 = new Archbishop(Color.WHITE, archbishopSquare1, "src/main/resources/XXLChess/w-archbishop.png");
         game.addPiece(archbishop1);
-        Archbishop archbishop2 = new Archbishop(Color.WHITE, archbishopSquare2, "src/main/resources/XXLChess/w-archbishop.png");
-        game.addPiece(archbishop2);
 
         // Create two Camel pieces and add them to the game
         Square camelSquare1 = game.getBoard().getSquare(4, 13);
@@ -119,8 +116,35 @@ public class App extends PApplet {
         Camel camel2 = new Camel(Color.WHITE, camelSquare2, "src/main/resources/XXLChess/w-camel.png");
         game.addPiece(camel2);
 
+        // Create two General pieces and add them to the game
+        Square generalSquare1 = game.getBoard().getSquare(5, 13);
+        Square generalSquare2 = game.getBoard().getSquare(8,13);
+        General general1 = new General(Color.WHITE, generalSquare1, "src/main/resources/XXLChess/w-knight-king.png");
+        game.addPiece(general1);
+        General general2 = new General(Color.WHITE, generalSquare2, "src/main/resources/XXLChess/w-knight-king.png");
+        game.addPiece(general2);
 
-    
+       // Create a Chancellor piece and add to the game
+        Square chancellorSquare = game.getBoard().getSquare(10, 13);
+        Chancellor chancellor = new Chancellor(Color.WHITE, chancellorSquare, "src/main/resources/XXLChess/w-chancellor.png");
+        game.addPiece(chancellor);
+
+        // Create an Amazon pieces and add to the game
+        Square amazonSquare = game.getBoard().getSquare(6, 13);
+        Amazon amazon = new Amazon(Color.WHITE, amazonSquare, "src/main/resources/XXLChess/w-amazon.png");
+        game.addPiece(amazon);
+
+        /* 
+        // Create black pawns and add to the game
+        for (int x = 0; x < 14; x++) {
+            Square pawnSquare = game.getBoard().getSquare(x, 1);
+            Pawn pawn = new Pawn(Color.WHITE, pawnSquare, "src/main/resources/XXLChess/b-pawn.png");
+            game.addPiece(pawn);
+        }
+*/
+        //
+
+
        // board = new Board();
     }
     
