@@ -1,27 +1,27 @@
 package XXLChess;
 
 public class Timer {
-    private int seconds;
+    private int time;
     private int increment;
 
-    public Timer(int seconds, int increment) {
-        this.seconds = seconds;
+    public Timer(int time, int increment) {
+        this.time = time;
         this.increment = increment;
     }
 
-    public void decrement() {
-        if (this.seconds > 0) {
-            this.seconds--;
+    public void tick() {
+        if (time > 0) {
+            time--;
+        } else {
+            throw new RuntimeException("Time's up!");
         }
     }
 
     public void increment() {
-        this.seconds += this.increment;
+        time += increment;
     }
 
-    @Override
-    public String toString() {
-        return String.format("%d:%02d", seconds / 60, seconds % 60);
+    public int getTime() {
+        return time;
     }
 }
-
