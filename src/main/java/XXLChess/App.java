@@ -20,6 +20,10 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.awt.Font;
+import processing.core.PFont;
 
 
 
@@ -43,6 +47,16 @@ public class App extends PApplet {
 
     private Timer playerTimer;
     private Timer cpuTimer;
+    private int playerTimeLeft; // in seconds
+    private int cpuTimeLeft;    // in seconds
+    private int increment;      // in seconds
+    private PFont timerFont;
+
+    private int playerIncrement;
+private int cpuIncrement;
+
+
+
 	
 
 
@@ -70,7 +84,16 @@ public class App extends PApplet {
     public void setup() {
         frameRate(FPS);
         loadConfig();
-            
+        startPlayerTimer();
+
+                // Initialize the timers and time left
+                playerTimeLeft = formatTime(playerTimeLeft);  // 5 minutes for example
+                cpuTimeLeft = formatTime(cpuTimeLeft);     // 5 minutes for example
+                increment = 10;        // 10 seconds increment for example
+                playerTimer = new Timer();
+                cpuTimer = new Timer();
+                timerFont = createFont("Arial", 16, true);
+     
         // Initialize the game instance variable
         this.game = new Game();
             
@@ -235,25 +258,26 @@ public class App extends PApplet {
 
     }
 
-    @Override
     public void mousePressed() {
         int x = mouseX / CELLSIZE;
         int y = mouseY / CELLSIZE;
         Square clickedSquare = game.getBoard().getSquare(x, y);
+        List<Square> legalMoves = null; // Define legalMoves here
     
         // If clicked on a non-empty square with a piece of the current player
         if (!clickedSquare.isEmpty() && clickedSquare.getPiece().getColor() == game.getCurrentPlayer()) {
             // Select the piece
             selectedPiece = clickedSquare.getPiece();
             pieceSelected = true;
+            legalMoves = selectedPiece.calculateLegalMoves(game.getBoard());
         }
         else if (pieceSelected) {
             Square destinationSquare = clickedSquare;
-            
+    
             // If the destination square is empty or contains an enemy piece
             if (destinationSquare.isEmpty() || !destinationSquare.getPiece().getColor().equals(selectedPiece.getColor())) {
-                List<Square> legalMoves = selectedPiece.calculateLegalMoves(game.getBoard());
-                
+                legalMoves = selectedPiece.calculateLegalMoves(game.getBoard());
+    
                 // If the destination square is a legal move
                 if (legalMoves.contains(destinationSquare)) {
                     // Move the piece
@@ -264,6 +288,43 @@ public class App extends PApplet {
                 }
             }
         }
+    
+    // If a legal move was made, reset the player's timer and start the CPU's timer
+    if (legalMoves != null && legalMoves.contains(clickedSquare)) {
+        playerTimer.cancel();
+        playerTimer = null; // Reset the timer
+        playerTimeLeft += increment;
+        startPlayerTimer(); // Restart the player's timer
+
+        cpuTimer.cancel();
+        cpuTimer = null; // Reset the timer
+        startCpuTimer(); // Restart the CPU's timer
+    }
+
+    private void startPlayerTimer() {
+        playerTimer = new Timer();
+        playerTimer.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                playerTimeLeft--;
+                if (playerTimeLeft <= 0) {
+                    playerTimer.cancel();
+                    playerTimer = null; // Player loses
+                }
+            }
+        }, 0, 1000); // Run every second
+    }
+
+    private void startCpuTimer() {
+        cpuTimer = new Timer();
+        cpuTimer.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                cpuTimeLeft--;
+                if (cpuTimeLeft <= 0) {
+                    cpuTimer.cancel();
+                    cpuTimer = null; // CPU loses
+                }
+            }
+        }, 0, 1000); // Run every second
     }
     
     
@@ -322,25 +383,49 @@ public class App extends PApplet {
             }
         }
 
+        /* 
         fill(255);
         textSize(24);
         text(playerTimer.toString(), WIDTH - SIDEBAR / 2, HEIGHT - 50); // Display player timer at the bottom of the sidebar
         text(cpuTimer.toString(), WIDTH - SIDEBAR / 2, 50); // Display CPU timer at the top of the sidebar
+        */
+
+        // Calculate the X position for the timers. It should be the total width minus the sidebar width plus some padding (10 in this case).
+        int timerXPosition = WIDTH - SIDEBAR + 10;
+
+        // Clear the previous timer display
+        fill(0x808080); // Replace with your background color
+        rect(timerXPosition - 10, 30, SIDEBAR - 20, HEIGHT - 60); // Replace 30 and HEIGHT - 60 with the area to clear
+
+        // Draw player timer at the top of the sidebar
+        fill(255, 255, 255); // White color
+        text(formatTime(playerTimeLeft), timerXPosition, 50); 
+
+        // Draw CPU timer at the bottom of the sidebar
+        text(formatTime(cpuTimeLeft), timerXPosition, HEIGHT - 50);
+
+
     }
 
     private void loadConfig() {
         JSONObject config = loadJSONObject(configPath);
         JSONObject timeControls = config.getJSONObject("time_controls");
-
+    
         JSONObject playerTimeControls = timeControls.getJSONObject("player");
-        this.playerTimer = new Timer(playerTimeControls.getInt("seconds"), playerTimeControls.getInt("increment"));
-
+        this.playerTimeLeft = playerTimeControls.getInt("seconds");
+        this.playerIncrement = playerTimeControls.getInt("increment"); // Separated increments
+    
         JSONObject cpuTimeControls = timeControls.getJSONObject("cpu");
-        this.cpuTimer = new Timer(cpuTimeControls.getInt("seconds"), cpuTimeControls.getInt("increment"));
+        this.cpuTimeLeft = cpuTimeControls.getInt("seconds");
+        this.cpuIncrement = cpuTimeControls.getInt("increment"); // Separated increments
     }
+    
 
-
-
+    private String formatTime(int seconds) {
+        int minutes = seconds / 60;
+        seconds = seconds % 60;
+        return String.format("%d:%02d", minutes, seconds);
+    }    
 
     public static void main(String[] args) {
         try {
